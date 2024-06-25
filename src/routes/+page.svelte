@@ -65,7 +65,7 @@
             </div>
 
             <div class="md:w-1/3 md:text-center">
-                <div>Benefit</div>
+                <div>Churned Revenue Diff</div>
                 <div class="font-bold text-xl font-mono">
                     {difference.toLocaleString()}€
                 </div>
