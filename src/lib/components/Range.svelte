@@ -1,13 +1,13 @@
 <script lang="ts">
-    export let name
+    export let name;
 
-    export let value: number
+    export let value: number;
 
-    export let valueDisplay
+    export let valueDisplay;
 
-    export let min = 0
-    export let max = 1
-    export let step = 0.01
+    export let min = 0;
+    export let max = 1;
+    export let step = 0.01;
 </script>
 
 <div class="flex flex-col w-full md:flex-row mb-2">

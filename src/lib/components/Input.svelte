@@ -1,9 +1,9 @@
 <script lang="ts">
-    export let name
-    export let min
-    export let max
-    export let value
-    export let step = 1
+    export let name;
+    export let min;
+    export let max;
+    export let value: number;
+    export let step = 1;
 </script>
 
 <div
@@ -15,9 +15,10 @@
         class="md:w-1/2 w-full font-mono text-right input input-bordered input-sm"
         type="number"
         inputmode="numeric"
-        min={min != undefined ? min : ''}
-        max={max != undefined ? max : ''}
+        min={min != undefined ? min : ""}
+        max={max != undefined ? max : ""}
         {step}
         bind:value
+        onClick="this.select()"
     />
 </div>

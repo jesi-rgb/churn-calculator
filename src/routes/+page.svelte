@@ -1,8 +1,6 @@
 <script lang="ts">
-    import Input from '$lib/components/Input.svelte'
-    import Range from '$lib/components/Range.svelte'
-
-    import LineChart from '$lib/components/LineChart.svelte'
+    import Input from "$lib/components/Input.svelte";
+    import Range from "$lib/components/Range.svelte";
 
     let nClients = 9000,
         ltv = 3600,
@@ -11,106 +9,122 @@
         nAccManagers = 200,
         nAccManagersGraphext = 60,
         accManagerSalary = 30000,
-        months = 1
+        years = 1;
 
-    $: data = Array(months)
-        .fill(1)
-        .map((e, i) => {
-            return deltaRevenueChurned * (i + 1)
-        })
+    $: churnRateGraphext =
+        churnRateGraphext <= churnRate ? churnRateGraphext : churnRate;
 
-    $: labels = Array(months)
-        .fill(1)
-        .map((e, i) => e + i * 1)
+    $: accManagerSalaryYearly = Math.floor(accManagerSalary * 1.3);
 
-    $: accManagerSalaryMonthly = Math.floor(accManagerSalary * 1.3)
+    // delta meaning 1 year in all instances
+    $: deltaRevenueChurned = nClients * ltv * churnRate;
+    $: deltaCost = nAccManagers * accManagerSalaryYearly;
 
-    $: deltaRevenueChurned = nClients * ltv * churnRate
-    $: deltaCost = nAccManagers * accManagerSalaryMonthly
+    $: deltaRevenueChurnGraphext = nClients * ltv * churnRateGraphext;
+    $: deltaCostGraphext = nAccManagersGraphext * accManagerSalaryYearly;
 
-    $: deltaRevenueChurnGraphext = nClients * ltv * churnRateGraphext
-    $: deltaCostGraphext = nAccManagersGraphext * accManagerSalaryMonthly
+    $: totalChurnedRevenue = deltaRevenueChurned * years;
+    $: totalCost = deltaCost * years;
 
-    $: totalChurnedRevenue = deltaRevenueChurned * months
-    $: totalCost = deltaCost * months
-
-    $: totalRevenue = (nClients * ltv - nClients * ltv * churnRate) * months
+    $: totalRevenue = (nClients * ltv - nClients * ltv * churnRate) * years;
     $: totalRevenueGraphext =
-        (nClients * ltv - nClients * ltv * churnRateGraphext) * months
+        (nClients * ltv - nClients * ltv * churnRateGraphext) * years;
 
-    $: totalRevenueChurnGraphext = deltaRevenueChurnGraphext * months
-    $: totalCostGraphext = deltaCostGraphext * months
+    $: totalRevenueChurnGraphext = deltaRevenueChurnGraphext * years;
+    $: totalCostGraphext = deltaCostGraphext * years;
 
-    $: value = totalChurnedRevenue - totalCost
-    $: valueGraphext = totalRevenueChurnGraphext - totalCostGraphext
+    //differences
+    $: differenceChurnedRevenue =
+        totalChurnedRevenue - totalRevenueChurnGraphext;
 
-    $: difference = totalChurnedRevenue - totalRevenueChurnGraphext
+    $: differenceTotalCost = totalCost - totalCostGraphext;
+
+    $: differenceRevenue = totalRevenueGraphext - totalRevenue;
+
+    $: combinedDifference = differenceRevenue + differenceTotalCost;
 </script>
 
 <h1 class="text-center font-bold text-4xl">Churn Calculator</h1>
 
-<div class="w-3/4 mx-auto text-sm md:text-base">
-    <section class="my-5 rounded-xl border border-primary/20 p-3 shadow-sm">
-        <div class="flex flex-col md:flex-row justify-between">
-            <div class="md:w-1/3">
-                <div>Churned Revenue</div>
-                <div
-                    class="tooltip"
-                    data-tip="Total amount of money lost due to clients that churned"
-                >
-                    <div class="font-bold text-xl font-mono text-error">
-                        {totalChurnedRevenue.toLocaleString()}€
-                    </div>
-                </div>
-            </div>
-
-            <div class="md:w-1/3 md:text-center">
-                <div>Churned Revenue Diff</div>
-                <div class="font-bold text-xl font-mono">
-                    {difference.toLocaleString()}€
-                </div>
-            </div>
-
-            <div class="md:text-right md:w-1/3">
-                <div>Churned Revenue (Graphext)</div>
-                <div class="font-bold text-xl font-mono text-primary">
-                    {totalRevenueChurnGraphext.toLocaleString()}€
-                </div>
-            </div>
-        </div>
-
-        <div class="flex flex-col md:flex-row justify-between mt-4">
-            <div class="text-left">
-                <div>
-                    Total Revenue: <span class="font-bold font-mono"
-                        >{totalRevenue.toLocaleString()}€</span
+<div class="mx-auto text-sm md:text-base">
+    <div class="overflow-x-auto">
+        <table class="table table-xs md:table-lg tabular-nums">
+            <thead>
+                <tr class="text-right">
+                    <th></th>
+                    <th>Currently</th>
+                    <th>Using Graphext</th>
+                    <th>Difference</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- row 1 -->
+                <tr class="">
+                    <th class="flex flex-col"
+                        >Churned Revenue <span
+                            class="text-xs font-semibold opacity-50"
+                            >(money lost due to churn)</span
+                        >
+                    </th>
+                    <td class="text-right text-error"
+                        >{totalChurnedRevenue.toLocaleString()}€</td
                     >
-                </div>
-                <div>
-                    Total Cost: <span class="font-bold font-mono"
-                        >{totalCost.toLocaleString()}€</span
+                    <td class="text-right text-primary"
+                        >{totalRevenueChurnGraphext.toLocaleString()}€</td
                     >
-                </div>
-            </div>
+                    <td class="text-right font-semibold"
+                        >{differenceChurnedRevenue.toLocaleString()}€</td
+                    >
+                </tr>
+                <!-- row 2 -->
+                <!-- row 3 -->
+                <tr class="">
+                    <th class="flex flex-col"
+                        >Total Revenue <span
+                            class="text-xs font-semibold opacity-50"
+                            >(net amount of money earned)</span
+                        >
+                    </th>
+                    <td class="text-right">{totalRevenue.toLocaleString()}€</td>
+                    <td class="text-right"
+                        >{totalRevenueGraphext.toLocaleString()}€</td
+                    >
+                    <td class="text-right font-semibold"
+                        >{differenceRevenue.toLocaleString()}€</td
+                    >
+                </tr>
 
-            <div class="text-left md:text-right">
-                <div>
-                    Total Revenue (Graphext): <span class="font-bold font-mono"
-                        >{totalRevenueGraphext.toLocaleString()}€</span
+                <tr class="">
+                    <th class="flex flex-col"
+                        >Total Cost <span
+                            class="text-xs font-semibold opacity-50"
+                            >(money spent on salaries)</span
+                        >
+                    </th>
+                    <td class="text-right">{totalCost.toLocaleString()}€</td>
+                    <td class="text-right"
+                        >{totalCostGraphext.toLocaleString()}€</td
                     >
-                </div>
-                <div>
-                    Total Cost (Graphext): <span class="font-bold font-mono"
-                        >{totalCostGraphext.toLocaleString()}€</span
+                    <td class="text-right font-semibold"
+                        >{differenceTotalCost.toLocaleString()}€</td
                     >
-                </div>
-            </div>
-        </div>
-    </section>
+                </tr>
+
+                <tr class="">
+                    <th></th>
+                    <td class="text-right"></td>
+                    <td class="text-right font-bold">Total Amount Saved</td>
+                    <td class="text-right font-semibold"
+                        >{combinedDifference.toLocaleString()}€</td
+                    >
+                </tr>
+            </tbody>
+        </table>
+    </div>
 
     <h2 class="font-bold text-2xl mt-5">Income</h2>
     <Input name="No. Clients" bind:value={nClients} min={0} step={10} />
-    <Input name="LTV" bind:value={ltv} min={0} step={10} />
+    <Input name="Annual Contract Value" bind:value={ltv} min={0} step={10} />
 
     <div class="divider my-0"></div>
     <h2 class="font-bold text-2xl mt-5">Cost</h2>
@@ -136,7 +150,7 @@
             step={0.01}
             name="Churn Rate"
             bind:value={churnRate}
-            valueDisplay={(churnRate * 100).toFixed(0) + '%'}
+            valueDisplay={(churnRate * 100).toFixed(0) + "%"}
         />
         <Range
             min={0}
@@ -144,15 +158,15 @@
             step={0.01}
             name="Churn Rate (Graphext)"
             bind:value={churnRateGraphext}
-            valueDisplay={(churnRateGraphext * 100).toFixed(0) + '%'}
+            valueDisplay={(churnRateGraphext * 100).toFixed(0) + "%"}
         />
         <Range
             min={1}
             max={100}
             step={1}
             name="Years"
-            valueDisplay={months}
-            bind:value={months}
+            valueDisplay={years}
+            bind:value={years}
         />
     </div>
 </div>
