@@ -1,13 +1,13 @@
 <script lang="ts">
     export let name;
-    export let min;
-    export let max;
+    export let min: undefined | number = undefined;
+    export let max: undefined | number = undefined;
     export let value: number;
     export let step = 1;
 </script>
 
 <div
-    class="gap-2 p-1 flex flex-col md:flex-row justify-between md:items-center mb-3"
+    class="gap-2 flex flex-col md:flex-row justify-between md:items-center mb-3"
 >
     <label for={name} class="">{name}</label>
     <input
