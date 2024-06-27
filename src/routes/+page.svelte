@@ -63,7 +63,7 @@
     <div class="text-xl">Total Amount Saved</div>
     <div
         class="tooltip"
-        data-tip="Total amount is the sum of the three blue values"
+        data-tip="Total amount is the sum of the highlighted blue values"
     >
         <div
             on:mouseover={() => {
@@ -142,8 +142,7 @@
                     >
                 </tr>
                 <tr class="">
-                    <th
-                        class="flex flex-col hover:text-blue-500 transition-colors"
+                    <th class="flex flex-col transition-colors"
                         >Lifetime Value Lost <span
                             class="text-xs font-semibold opacity-50"
                             >(fraction lost due to churn based on estimated
