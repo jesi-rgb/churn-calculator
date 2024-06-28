@@ -1,8 +1,8 @@
 <script lang="ts">
-    import Input from "$lib/components/Input.svelte";
-    import Range from "$lib/components/Range.svelte";
+    import Input from '$lib/components/Input.svelte'
+    import Range from '$lib/components/Range.svelte'
 
-    let hovered: boolean = false;
+    let hovered: boolean = false
 
     let nClients = 9000,
         acv = 3600,
@@ -14,55 +14,55 @@
         clientsPerManagerMonth = 20,
         topClientsAddressed = 0.3,
         accManagerSalary = 30000,
-        years = 0.5;
+        years = 0.5
 
-    $: nAccManagers = Math.ceil(nClients / clientsPerManagerMonth);
+    $: nAccManagers = Math.ceil(nClients / clientsPerManagerMonth)
     $: nAccManagersGraphext = Math.ceil(
-        (nClients * topClientsAddressed) / clientsPerManagerMonth,
-    );
+        (nClients * topClientsAddressed) / clientsPerManagerMonth
+    )
 
     $: churnRateGraphext =
-        churnRateGraphext <= churnRate ? churnRateGraphext : churnRate;
+        churnRateGraphext <= churnRate ? churnRateGraphext : churnRate
 
-    $: accManagerSalaryYearly = Math.floor(accManagerSalary * 1.3);
+    $: accManagerSalaryYearly = Math.floor(accManagerSalary * 1.3)
 
     // delta meaning 1 year in all instances
-    $: deltaRevenueChurned = nClients * acv * churnRate;
-    $: deltaCost = nAccManagers * accManagerSalaryYearly;
+    $: deltaRevenueChurned = nClients * acv * churnRate
+    $: deltaCost = nAccManagers * accManagerSalaryYearly
 
-    $: deltaRevenueChurnGraphext = nClients * acv * churnRateGraphext;
-    $: deltaCostGraphext = nAccManagersGraphext * accManagerSalaryYearly;
+    $: deltaRevenueChurnGraphext = nClients * acv * churnRateGraphext
+    $: deltaCostGraphext = nAccManagersGraphext * accManagerSalaryYearly
 
-    $: totalChurnedRevenue = deltaRevenueChurned * years;
-    $: totalCost = deltaCost * years;
+    $: totalChurnedRevenue = deltaRevenueChurned * years
+    $: totalCost = deltaCost * years
 
-    $: totalRevenue = (nClients * acv - nClients * acv * churnRate) * years;
+    $: totalRevenue = (nClients * acv - nClients * acv * churnRate) * years
     $: totalRevenueGraphext =
-        (nClients * acv - nClients * acv * churnRateGraphext) * years;
+        (nClients * acv - nClients * acv * churnRateGraphext) * years
 
-    $: totalRevenueChurnGraphext = deltaRevenueChurnGraphext * years;
-    $: totalCostGraphext = deltaCostGraphext * years;
+    $: totalRevenueChurnGraphext = deltaRevenueChurnGraphext * years
+    $: totalCostGraphext = deltaCostGraphext * years
 
-    $: ltv = acv * estimatedLifeTime; // how much per year times how many years we assume
-    $: ltvCurrentLoss = ltv * nClients * churnRate * years;
-    $: ltvGraphextLoss = ltv * nClients * churnRateGraphext * years;
+    $: ltv = acv * estimatedLifeTime // how much per year times how many years we assume
+    $: ltvCurrentLoss = ltv * nClients * churnRate * years
+    $: ltvGraphextLoss = ltv * nClients * churnRateGraphext * years
 
     // differences
     $: differenceChurnedRevenue =
-        totalChurnedRevenue - totalRevenueChurnGraphext;
+        totalChurnedRevenue - totalRevenueChurnGraphext
 
-    $: differenceTotalCost = totalCost - totalCostGraphext;
+    $: differenceTotalCost = totalCost - totalCostGraphext
 
-    $: differenceRevenue = totalRevenueGraphext - totalRevenue;
+    $: differenceRevenue = totalRevenueGraphext - totalRevenue
 
-    $: ltvLossDifference = ltvCurrentLoss - ltvGraphextLoss;
+    $: ltvLossDifference = ltvCurrentLoss - ltvGraphextLoss
 
-    $: combinedDifference = differenceTotalCost + ltvLossDifference;
+    $: combinedDifference = differenceTotalCost + ltvLossDifference
 </script>
 
-<h1 class="font-bold text-4xl mb-5">Churn Calculator</h1>
+<h1 class="font-bold text-4xl mb-3">Churn Calculator</h1>
 
-<p class="opacity-50 w-1/2">
+<p class="opacity-50 mb-5 md:w-1/2">
     Calculate different metrics regarding customer churn and how much money is
     lost over time. Gain perspective on how much money can be saved in oversized
     teams that could be reinvested in other tasks.
@@ -76,10 +76,10 @@
     >
         <div
             on:mouseover={() => {
-                hovered = true;
+                hovered = true
             }}
             on:mouseleave={() => {
-                hovered = false;
+                hovered = false
             }}
             class="text-3xl font-bold tabular-nums"
         >
@@ -104,7 +104,7 @@
                         >Churned Revenue <span
                             class="text-xs font-semibold opacity-50"
                             >(money lost due to churn over {years}
-                            {years == 1 ? "year" : "years"})</span
+                            {years == 1 ? 'year' : 'years'})</span
                         >
                     </th>
                     <td class="text-right text-error"
@@ -122,7 +122,7 @@
                         >Total Revenue <span
                             class="text-xs font-semibold opacity-50"
                             >(net amount of money earned over {years}
-                            {years == 1 ? "year" : "years"})</span
+                            {years == 1 ? 'year' : 'years'})</span
                         >
                     </th>
                     <td class="text-right">{totalRevenue.toLocaleString()}€</td>
@@ -139,7 +139,7 @@
                         >Total Cost <span
                             class="text-xs font-semibold opacity-50"
                             >(money spent in salaries in {years}
-                            {years == 1 ? "year" : "years"})</span
+                            {years == 1 ? 'year' : 'years'})</span
                         >
                     </th>
                     <td class="text-right">{totalCost.toLocaleString()}€</td>
@@ -196,7 +196,7 @@
             step={0.01}
             name="Churn Rate (annual)"
             bind:value={churnRate}
-            valueDisplay={(churnRate * 100).toFixed(0) + "%"}
+            valueDisplay={(churnRate * 100).toFixed(0) + '%'}
         />
         <Range
             min={0}
@@ -204,7 +204,7 @@
             step={0.01}
             name="Churn Rate (annual, with Predictive Model)"
             bind:value={churnRateGraphext}
-            valueDisplay={(churnRateGraphext * 100).toFixed(0) + "%"}
+            valueDisplay={(churnRateGraphext * 100).toFixed(0) + '%'}
         />
         <Range
             min={0.25}
@@ -237,7 +237,7 @@
             bind:value={topClientsAddressed}
             valueDisplay={`${topClientsAddressed * 100}% of ${nClients} = ${nClients * topClientsAddressed} clients`}
             min={0.1}
-            max={0.5}
+            max={0.8}
             step={0.05}
         ></Range>
         <span class="text-sm opacity-50 -mt-9"

@@ -1,19 +1,26 @@
-import type { Config } from "tailwindcss";
+import type { Config } from 'tailwindcss'
 
 export default {
-    content: ["./src/**/*.{html,js,svelte,ts}"],
+    content: ['./src/**/*.{html,js,svelte,ts}'],
 
     theme: {
-        extend: {},
+        extend: {
+            fontFamily: {
+                sans: ['Inter'],
+                mono: ['IBM Plex Mono']
+            }
+        }
     },
 
-    plugins: [require("daisyui")],
+    plugins: [require('daisyui')],
     daisyui: {
         logs: false,
         themes: [
-            { light: { ...require("daisyui/src/theming/themes")["corporate"] } },
-            { dark: { ...require("daisyui/src/theming/themes")["night"] } },
-            "cupcake",
-        ],
-    },
-} as Config;
+            {
+                light: { ...require('daisyui/src/theming/themes')['corporate'] }
+            },
+            { dark: { ...require('daisyui/src/theming/themes')['night'] } },
+            'cupcake'
+        ]
+    }
+} as Config
