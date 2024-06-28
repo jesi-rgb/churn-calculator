@@ -87,8 +87,9 @@
         </div>
     </div>
 </div>
+
 <div class="mx-auto text-sm md:text-base">
-    <div class="overflow-x-auto">
+    <div class="overflow-x-scroll">
         <table class="table table-xs border md:table-md tabular-nums">
             <thead>
                 <tr class="text-right">
@@ -172,91 +173,93 @@
         </table>
     </div>
 
-    <h2 class="font-bold text-2xl mt-10">Revenue</h2>
-    <Input name="№ Clients" bind:value={nClients} min={0} step={10} />
-    <Input
-        name="Annual Contract Value (avg)"
-        bind:value={acv}
-        min={0}
-        step={10}
-    />
-
-    <Input
-        name="Estimated Client Lifetime (years)"
-        bind:value={estimatedLifeTime}
-        min={0}
-        step={0.5}
-    />
-
-    <h2 class="font-bold text-2xl mt-10">Churn</h2>
-    <div class="w-full">
-        <Range
+    <div class="md:px-[1rem]">
+        <h2 class="font-bold text-2xl mt-10">Revenue</h2>
+        <Input name="№ Clients" bind:value={nClients} min={0} step={10} />
+        <Input
+            name="Annual Contract Value (avg)"
+            bind:value={acv}
             min={0}
-            max={0.4}
-            step={0.01}
-            name="Churn Rate (annual)"
-            bind:value={churnRate}
-            valueDisplay={(churnRate * 100).toFixed(0) + '%'}
+            step={10}
         />
-        <Range
+
+        <Input
+            name="Estimated Client Lifetime (years)"
+            bind:value={estimatedLifeTime}
             min={0}
-            max={0.4}
-            step={0.01}
-            name="Churn Rate (annual, with Predictive Model)"
-            bind:value={churnRateGraphext}
-            valueDisplay={(churnRateGraphext * 100).toFixed(0) + '%'}
+            step={0.5}
         />
-        <Range
-            min={0.25}
-            max={5}
-            step={0.25}
-            name="Time elapsed (years)"
-            valueDisplay={years}
-            bind:value={years}
-        />
-    </div>
 
-    <h2 class="font-bold text-2xl mt-10">Cost</h2>
-
-    <Input
-        name="Account Manager Salary (annual)"
-        bind:value={accManagerSalary}
-        min={0}
-        step={500}
-    />
-
-    <Input
-        name="Clients per Acc. Manager (month)"
-        bind:value={clientsPerManagerMonth}
-        min={0}
-    />
-
-    <div class="mb-3">
-        <Range
-            name="Top % of clients addressed:"
-            bind:value={topClientsAddressed}
-            valueDisplay={`${topClientsAddressed * 100}% of ${nClients} = ${nClients * topClientsAddressed} clients`}
-            min={0.1}
-            max={0.8}
-            step={0.05}
-        ></Range>
-        <span class="text-sm opacity-50 -mt-9"
-            >The percentage of clients you're left with after the model's
-            classification
-        </span>
-    </div>
-
-    <div class="flex justify-between pr-5 mb-3 tabular-nums">
-        <div>№ Acc Managers necessary to address every client</div>
-        <div class="font-semibold">
-            {nAccManagers}
+        <h2 class="font-bold text-2xl mt-10">Churn</h2>
+        <div class="w-full">
+            <Range
+                min={0}
+                max={0.4}
+                step={0.01}
+                name="Churn Rate (annual)"
+                bind:value={churnRate}
+                valueDisplay={(churnRate * 100).toFixed(0) + '%'}
+            />
+            <Range
+                min={0}
+                max={0.4}
+                step={0.01}
+                name="Churn Rate (annual, with Predictive Model)"
+                bind:value={churnRateGraphext}
+                valueDisplay={(churnRateGraphext * 100).toFixed(0) + '%'}
+            />
+            <Range
+                min={0.25}
+                max={5}
+                step={0.25}
+                name="Time elapsed (years)"
+                valueDisplay={years}
+                bind:value={years}
+            />
         </div>
-    </div>
 
-    <div class="flex justify-between pr-5 mb-3 tabular-nums">
-        <div>№ Acc Managers (with Predictive Model)</div>
-        <div class="font-semibold">
-            {nAccManagersGraphext}
+        <h2 class="font-bold text-2xl mt-10">Cost</h2>
+
+        <Input
+            name="Account Manager Salary (annual)"
+            bind:value={accManagerSalary}
+            min={0}
+            step={500}
+        />
+
+        <Input
+            name="Clients per Acc. Manager (month)"
+            bind:value={clientsPerManagerMonth}
+            min={0}
+        />
+
+        <div class="mb-3">
+            <Range
+                name="Top % of clients addressed:"
+                bind:value={topClientsAddressed}
+                valueDisplay={`${topClientsAddressed * 100}% of ${nClients} = ${nClients * topClientsAddressed} clients`}
+                min={0.1}
+                max={0.8}
+                step={0.05}
+            ></Range>
+            <span class="text-sm opacity-50 -mt-9"
+                >The percentage of clients you're left with after the model's
+                classification
+            </span>
+        </div>
+
+        <div class="flex justify-between pr-5 mb-3 tabular-nums">
+            <div>№ Acc Managers necessary to address every client</div>
+            <div class="font-semibold">
+                {nAccManagers}
+            </div>
+        </div>
+
+        <div class="flex justify-between pr-5 mb-3 tabular-nums">
+            <div>№ Acc Managers (with Predictive Model)</div>
+            <div class="font-semibold">
+                {nAccManagersGraphext}
+            </div>
         </div>
     </div>
 </div>
