@@ -137,40 +137,6 @@
                         >{differenceTotalCost.toLocaleString()}€</td
                     >
                 </tr>
-                <tr class="">
-                    <th class="flex flex-col"
-                        >Churned Revenue <span
-                            class="text-xs font-semibold opacity-50"
-                            >(money lost due to churn over {years}
-                            {years == 1 ? "year" : "years"})</span
-                        >
-                    </th>
-                    <td class="text-right"
-                        >{totalChurnedRevenue.toLocaleString()}€</td
-                    >
-                    <td class="text-right"
-                        >{totalRevenueChurnGraphext.toLocaleString()}€</td
-                    >
-                    <td class="text-right font-semibold"
-                        >{differenceChurnedRevenue.toLocaleString()}€</td
-                    >
-                </tr>
-                <tr class="">
-                    <th class="flex flex-col"
-                        >Total Revenue <span
-                            class="text-xs font-semibold opacity-50"
-                            >(net amount of money earned over {years}
-                            {years == 1 ? "year" : "years"})</span
-                        >
-                    </th>
-                    <td class="text-right">{totalRevenue.toLocaleString()}€</td>
-                    <td class="text-right"
-                        >{totalRevenueGraphext.toLocaleString()}€</td
-                    >
-                    <td class="text-right font-semibold"
-                        >{differenceRevenue.toLocaleString()}€</td
-                    >
-                </tr>
             </tbody>
         </table>
     </div>
