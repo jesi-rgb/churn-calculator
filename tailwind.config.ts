@@ -6,8 +6,8 @@ export default {
     theme: {
         extend: {
             fontFamily: {
-                sans: ['Inter'],
-                mono: ['IBM Plex Mono']
+                sans: ['Inter', "ui-sans-serif", "system-ui", "sans-serif", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"],
+                mono: ['IBM Plex Mono', "ui-monospace", "SFMono-Regular", "Menlo", "Monaco", "Consolas", "Liberation Mono", "Courier New", "monospace"]
             }
         }
     },
