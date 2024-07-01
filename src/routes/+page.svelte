@@ -64,12 +64,12 @@
 
 <p class="opacity-50 mb-5 md:w-1/2">
     Calculate different metrics regarding customer churn and how much money is
-    lost over time. Gain perspective on how much money can be saved in oversized
-    teams that could be reinvested in other tasks.
+    lost over time. Gain perspective on how much you can grow other aspects of
+    your team.
 </p>
 
 <div class="flex gap-3 items-baseline justify-end mb-5">
-    <div class="text-xl">Total Amount Saved</div>
+    <div class="text-xl">Total Growth</div>
     <div
         class="tooltip"
         data-tip="Total amount is the sum of the highlighted blue values"
@@ -101,6 +101,43 @@
             </thead>
             <tbody>
                 <tr class="">
+                    <th class="flex flex-col transition-colors"
+                        >Lifetime Value Lost <span
+                            class="text-xs font-semibold opacity-50"
+                            >(money lost due to churn based on estimated client
+                            LTV)</span
+                        >
+                    </th>
+
+                    <td class="text-right"
+                        >{ltvCurrentLoss.toLocaleString()}€</td
+                    >
+                    <td class="text-right"
+                        >{ltvGraphextLoss.toLocaleString()}€</td
+                    >
+                    <td class:hovered class="text-right font-semibold"
+                        >{ltvLossDifference.toLocaleString()}€</td
+                    >
+                </tr>
+                <tr class="">
+                    <th class="flex flex-col"
+                        >Total Cost <span
+                            class="text-xs font-semibold opacity-50"
+                            >(money spent in salaries in {years}
+                            {years == 1 ? "year" : "years"})</span
+                        >
+                    </th>
+
+                    <td class="text-right">{totalCost.toLocaleString()}€</td>
+                    <td class="text-right"
+                        >{totalCostGraphext.toLocaleString()}€</td
+                    >
+
+                    <td class:hovered class="text-right font-semibold"
+                        >{differenceTotalCost.toLocaleString()}€</td
+                    >
+                </tr>
+                <tr class="">
                     <th class="flex flex-col"
                         >Churned Revenue <span
                             class="text-xs font-semibold opacity-50"
@@ -108,10 +145,10 @@
                             {years == 1 ? "year" : "years"})</span
                         >
                     </th>
-                    <td class="text-right text-error"
+                    <td class="text-right"
                         >{totalChurnedRevenue.toLocaleString()}€</td
                     >
-                    <td class="text-right text-primary"
+                    <td class="text-right"
                         >{totalRevenueChurnGraphext.toLocaleString()}€</td
                     >
                     <td class="text-right font-semibold"
@@ -132,41 +169,6 @@
                     >
                     <td class="text-right font-semibold"
                         >{differenceRevenue.toLocaleString()}€</td
-                    >
-                </tr>
-
-                <tr class="">
-                    <th class="flex flex-col"
-                        >Total Cost <span
-                            class="text-xs font-semibold opacity-50"
-                            >(money spent in salaries in {years}
-                            {years == 1 ? "year" : "years"})</span
-                        >
-                    </th>
-                    <td class="text-right">{totalCost.toLocaleString()}€</td>
-                    <td class="text-right"
-                        >{totalCostGraphext.toLocaleString()}€</td
-                    >
-                    <td class:hovered class="text-right font-semibold"
-                        >{differenceTotalCost.toLocaleString()}€</td
-                    >
-                </tr>
-                <tr class="">
-                    <th class="flex flex-col transition-colors"
-                        >Lifetime Value Lost <span
-                            class="text-xs font-semibold opacity-50"
-                            >(money lost due to churn based on estimated client
-                            LTV)</span
-                        >
-                    </th>
-                    <td class="text-right"
-                        >{ltvCurrentLoss.toLocaleString()}€</td
-                    >
-                    <td class="text-right"
-                        >{ltvGraphextLoss.toLocaleString()}€</td
-                    >
-                    <td class:hovered class="text-right font-semibold"
-                        >{ltvLossDifference.toLocaleString()}€</td
                     >
                 </tr>
             </tbody>
