@@ -239,7 +239,7 @@
             />
         </div>
 
-        <h2 class="font-bold text-2xl mt-10">Cost</h2>
+        <h2 class="font-bold text-2xl mt-10">Account Management Cost</h2>
 
         <Input
             name="Account Manager Salary (annual)"
