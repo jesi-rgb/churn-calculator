@@ -2,6 +2,9 @@
     import Input from "$lib/components/Input.svelte";
     import Range from "$lib/components/Range.svelte";
 
+    import { Tooltip } from "bits-ui";
+    import { fly } from "svelte/transition";
+
     let hovered: boolean = false;
 
     let nClients = 9000,
@@ -81,37 +84,56 @@
 
 <div class="flex gap-3 items-baseline justify-end mb-5">
     <div class="text-xl">Total Growth</div>
-    <div
-        class="tooltip"
-        data-tip="Total amount is the sum of the highlighted blue values"
-    >
-        <div
-            on:mouseover={() => {
-                hovered = true;
-            }}
-            on:mouseleave={() => {
-                hovered = false;
-            }}
-            class="text-3xl font-bold tabular-nums"
+
+    <Tooltip.Root openDelay={0}>
+        <Tooltip.Trigger>
+            <div
+                role="tooltip"
+                on:focus={() => {
+                    hovered = true;
+                }}
+                on:mouseover={() => {
+                    hovered = true;
+                }}
+                on:mouseleave={() => {
+                    hovered = false;
+                }}
+                class="text-3xl font-bold tabular-nums"
+            >
+                {combinedDifference.toLocaleString()}€
+            </div>
+        </Tooltip.Trigger>
+        <Tooltip.Content
+            transition={fly}
+            transitionConfig={{ y: 8, duration: 150 }}
+            sideOffset={0}
         >
-            {combinedDifference.toLocaleString()}€
-        </div>
-    </div>
+            <div
+                class="flex bg-base-100/90 border-base-content/30 items-center text-balance w-40 shadow-sm text-center justify-center rounded-input border p-3 text-sm outline-none"
+            >
+                Total amount is the sum of the two highlighted values
+            </div>
+
+            <Tooltip.Arrow
+                class="rounded-[2px] border-l border-t border-base-content/30"
+            />
+        </Tooltip.Content>
+    </Tooltip.Root>
 </div>
 
 <div class="mx-auto text-sm md:text-base">
     <div class="overflow-x-scroll">
-        <table class="table table-xs border md:table-md tabular-nums">
-            <thead>
-                <tr class="text-right">
+        <table class="table table-xs md:table-md tabular-nums">
+            <thead class="border border-base-content/30">
+                <tr class="text-right border border-base-content/30">
                     <th></th>
                     <th>Currently</th>
                     <th>Using Graphext</th>
                     <th>Difference</th>
                 </tr>
             </thead>
-            <tbody>
-                <tr class="">
+            <tbody class="border border-base-content/10">
+                <tr class="border border-base-content/10">
                     <th class="flex flex-col transition-colors"
                         >Lifetime Value Lost <span
                             class="text-xs font-semibold opacity-50"
@@ -130,7 +152,7 @@
                         >{ltvLossDifference.toLocaleString()}€</td
                     >
                 </tr>
-                <tr class="">
+                <tr class="border border-base-content/10">
                     <th class="flex flex-col"
                         >Total Cost <span
                             class="text-xs font-semibold opacity-50"
@@ -182,9 +204,6 @@
         <div class="flex justify-between pr-5 mb-3 tabular-nums">
             <div>
                 <div>Value obtained from reinvestment in marketing</div>
-                <span class="text-sm opacity-50">
-                    Assuming every unattended client leaves
-                </span>
             </div>
 
             <div class="font-semibold">
