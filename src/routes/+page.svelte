@@ -12,8 +12,11 @@
         nAccManagers = 200,
         nAccManagersGraphext = 60,
         clientsPerManagerMonth = 20,
-        topClientsAddressed = 0.3,
+        topClientsAddressed = 0.7,
+        valueLostNotAddressed = 0, //will be calculated
+        percentageLostNotAddressed = 0.5, //will be calculated
         accManagerSalary = 30000,
+        mer = 3,
         years = 0.5;
 
     $: nAccManagers = Math.ceil(nClients / clientsPerManagerMonth);
@@ -46,6 +49,14 @@
     $: ltv = acv * estimatedLifeTime; // how much per year times how many years we assume
     $: ltvCurrentLoss = ltv * nClients * churnRate * years;
     $: ltvGraphextLoss = ltv * nClients * churnRateGraphext * years;
+
+    $: clientsAddressed = nClients * topClientsAddressed;
+    $: clientsNotAddressed = nClients * (1 - topClientsAddressed);
+    $: valueLostNotAddressed =
+        clientsNotAddressed *
+        acv *
+        percentageLostNotAddressed *
+        estimatedLifeTime;
 
     // differences
     $: differenceChurnedRevenue =
@@ -158,6 +169,29 @@
             step={0.5}
         />
 
+        <h2 class="font-bold text-2xl mt-10">Marketing</h2>
+        <Range
+            min={1}
+            max={10}
+            step={0.1}
+            name="MER (Marketing Efficiency Ratio)"
+            bind:value={mer}
+            valueDisplay={mer.toFixed(1)}
+        />
+
+        <div class="flex justify-between pr-5 mb-3 tabular-nums">
+            <div>
+                <div>Value obtained from reinvestment in marketing</div>
+                <span class="text-sm opacity-50">
+                    Assuming every unattended client leaves
+                </span>
+            </div>
+
+            <div class="font-semibold">
+                {(combinedDifference * mer).toLocaleString() + "€"}
+            </div>
+        </div>
+
         <h2 class="font-bold text-2xl mt-10">Churn</h2>
         <div class="w-full">
             <Range
@@ -201,21 +235,6 @@
             min={0}
         />
 
-        <div class="mb-3">
-            <Range
-                name="Top % of clients addressed:"
-                bind:value={topClientsAddressed}
-                valueDisplay={`${topClientsAddressed * 100}% of ${nClients} = ${nClients * topClientsAddressed} clients`}
-                min={0.1}
-                max={0.8}
-                step={0.05}
-            ></Range>
-            <span class="text-sm opacity-50 -mt-9"
-                >The percentage of clients you're left with after the model's
-                classification
-            </span>
-        </div>
-
         <div class="flex justify-between pr-5 mb-3 tabular-nums">
             <div>№ Acc Managers necessary to address every client</div>
             <div class="font-semibold">
@@ -227,6 +246,46 @@
             <div>№ Acc Managers (with Predictive Model)</div>
             <div class="font-semibold">
                 {nAccManagersGraphext}
+            </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="mb-3">
+            <Range
+                name="Top % of clients addressed:"
+                bind:value={topClientsAddressed}
+                valueDisplay={`${(topClientsAddressed * 100).toFixed(0)}% of ${nClients} = ${nClients * topClientsAddressed} clients`}
+                min={0.1}
+                max={0.8}
+                step={0.05}
+            ></Range>
+            <span class="text-sm opacity-50 -mt-9"
+                >The percentage of clients you're left with after the model's
+                classification
+            </span>
+        </div>
+
+        <div class="flex justify-between pr-5 mb-3 tabular-nums">
+            <div>
+                <div>Value lost due to unattended clients</div>
+                <span class="text-sm opacity-50">
+                    Assuming {percentageLostNotAddressed * 100}% of unattended
+                    clients leave
+                </span>
+
+                <input
+                    type="range"
+                    class="range range-xs"
+                    min={0}
+                    max={1}
+                    step={0.1}
+                    bind:value={percentageLostNotAddressed}
+                />
+            </div>
+
+            <div class="font-semibold">
+                {valueLostNotAddressed.toLocaleString() + "€"}
             </div>
         </div>
     </div>
