@@ -129,12 +129,12 @@
         </Tooltip.Root>
     </div>
 
-    <div class="flex flex-col">
-        Return from re-investing in Marketing {(
+    <div class="flex flex-col tabular-nums">
+        Return from reinvesting in Marketing {(
             percentageInvestedMarketing * 100
         ).toFixed(0)}%
         <span class="text-3xl tabular-nums font-bold"
-            >{totalMarketingReturn.toLocaleString()}€</span
+            >{Math.round(totalMarketingReturn).toLocaleString()}€</span
         >
     </div>
 </div>
@@ -364,7 +364,8 @@
                     </div>
 
                     <div class="font-semibold">
-                        {totalMarketingReturn.toLocaleString() + "€"}
+                        {Math.round(totalMarketingReturn).toLocaleString() +
+                            "€"}
                     </div>
                 </div>
             </Section>
