@@ -18,9 +18,10 @@
         clientsPerManagerMonth = 20,
         topClientsAddressed = 0.7,
         valueLostNotAddressed = 0, //will be calculated
-        percentageLostNotAddressed = 0.5, //will be calculated
+        percentageLostNotAddressed = 0.3, //will be calculated
         accManagerSalary = 30000,
         mer = 3,
+        percentageInvestedMarketing = 0.6,
         years = 0.5;
 
     $: nAccManagers = Math.ceil(nClients / clientsPerManagerMonth);
@@ -73,6 +74,9 @@
     $: ltvLossDifference = ltvCurrentLoss - ltvGraphextLoss;
 
     $: combinedDifference = differenceTotalCost + ltvLossDifference;
+
+    $: totalMarketingReturn =
+        combinedDifference * mer * percentageInvestedMarketing;
 </script>
 
 <h1 class="font-bold text-4xl mb-3">Churn Calculator</h1>
@@ -83,43 +87,56 @@
     your team.
 </p>
 
-<div class="flex gap-3 items-baseline justify-end mb-5">
-    <div class="text-xl">Total Growth</div>
+<div
+    class="flex flex-col md:flex-row md:text-center gap-3 md:items-end justify-around mb-5"
+>
+    <div>
+        <div class="text-xl">Total Growth</div>
 
-    <Tooltip.Root openDelay={0}>
-        <Tooltip.Trigger>
-            <div
-                role="tooltip"
-                on:focus={() => {
-                    hovered = true;
-                }}
-                on:mouseover={() => {
-                    hovered = true;
-                }}
-                on:mouseleave={() => {
-                    hovered = false;
-                }}
-                class="text-3xl font-bold tabular-nums"
+        <Tooltip.Root openDelay={0}>
+            <Tooltip.Trigger>
+                <div
+                    role="tooltip"
+                    on:focus={() => {
+                        hovered = true;
+                    }}
+                    on:mouseover={() => {
+                        hovered = true;
+                    }}
+                    on:mouseleave={() => {
+                        hovered = false;
+                    }}
+                    class="text-3xl font-bold tabular-nums"
+                >
+                    {combinedDifference.toLocaleString()}€
+                </div>
+            </Tooltip.Trigger>
+            <Tooltip.Content
+                transition={fly}
+                transitionConfig={{ y: 8, duration: 150 }}
+                sideOffset={0}
             >
-                {combinedDifference.toLocaleString()}€
-            </div>
-        </Tooltip.Trigger>
-        <Tooltip.Content
-            transition={fly}
-            transitionConfig={{ y: 8, duration: 150 }}
-            sideOffset={0}
+                <div
+                    class="flex bg-base-100 border-base-content/30 items-center text-balance w-40 shadow-sm text-center justify-center rounded-input border p-3 text-sm outline-none"
+                >
+                    Total amount is the sum of the two highlighted values
+                </div>
+
+                <Tooltip.Arrow
+                    class="rounded-[2px] border-l border-t border-base-content/30"
+                />
+            </Tooltip.Content>
+        </Tooltip.Root>
+    </div>
+
+    <div class="flex flex-col">
+        Return from re-investing in Marketing {(
+            percentageInvestedMarketing * 100
+        ).toFixed(0)}%
+        <span class="text-3xl tabular-nums font-bold"
+            >{totalMarketingReturn.toLocaleString()}€</span
         >
-            <div
-                class="flex bg-base-100/90 border-base-content/30 items-center text-balance w-40 shadow-sm text-center justify-center rounded-input border p-3 text-sm outline-none"
-            >
-                Total amount is the sum of the two highlighted values
-            </div>
-
-            <Tooltip.Arrow
-                class="rounded-[2px] border-l border-t border-base-content/30"
-            />
-        </Tooltip.Content>
-    </Tooltip.Root>
+    </div>
 </div>
 
 <div class="mx-auto text-sm md:text-base">
@@ -189,7 +206,7 @@
     <div class="mt-5 grid grid-cols-1 md:grid-cols-2 gap-5">
         <div class="grid gap-5">
             <Section>
-                <h2 class="font-bold text-2xl">Revenue</h2>
+                <h2 class="font-bold text-2xl mb-3">Revenue</h2>
                 <Input
                     name="№ Clients"
                     bind:value={nClients}
@@ -212,7 +229,7 @@
             </Section>
 
             <Section>
-                <h2 class="font-bold text-2xl">Account Management Cost</h2>
+                <h2 class="font-bold text-2xl mb-3">Account Management Cost</h2>
 
                 <Input
                     name="Account Manager Salary (annual)"
@@ -247,7 +264,7 @@
                     <Range
                         name="Top % of clients addressed:"
                         bind:value={topClientsAddressed}
-                        valueDisplay={`${(topClientsAddressed * 100).toFixed(0)}% of ${nClients} = ${clientsAddressed} clients`}
+                        valueDisplay={`${(topClientsAddressed * 100).toFixed(0)}% of ${nClients} = ${Math.ceil(clientsAddressed)} clients`}
                         min={0.1}
                         max={0.8}
                         step={0.05}
@@ -285,36 +302,7 @@
 
         <div class="grid h-fit gap-5">
             <Section>
-                <h2 class="font-bold text-2xl">Marketing</h2>
-                <div class="flex flex-col space-y-3">
-                    <div>
-                        MER (Marketing Efficiency Ratio) <span class="font-bold"
-                            >{mer.toFixed(1)}</span
-                        >
-                    </div>
-                    <input
-                        type="range"
-                        min={1}
-                        max={10}
-                        step={0.1}
-                        class="range range-xs"
-                        bind:value={mer}
-                    />
-                </div>
-
-                <div class="flex justify-between pr-5 mt-3 tabular-nums">
-                    <div>
-                        <div>Value obtained from reinvestment in marketing</div>
-                    </div>
-
-                    <div class="font-semibold">
-                        {(combinedDifference * mer).toLocaleString() + "€"}
-                    </div>
-                </div>
-            </Section>
-
-            <Section>
-                <h2 class="font-bold text-2xl">Churn</h2>
+                <h2 class="font-bold text-2xl mb-3">Churn</h2>
                 <div class="w-full">
                     <Range
                         min={0}
@@ -333,6 +321,51 @@
                         valueDisplay={(churnRateGraphext * 100).toFixed(0) +
                             "%"}
                     />
+                </div>
+            </Section>
+
+            <Section>
+                <h2 class="font-bold text-2xl mb-3">Marketing</h2>
+                <div class="flex flex-col space-y-2 mb-5">
+                    <div>
+                        MER (Marketing Efficiency Ratio) <span class="font-bold"
+                            >{mer.toFixed(1)}</span
+                        >
+                    </div>
+                    <input
+                        type="range"
+                        min={1}
+                        max={10}
+                        step={0.1}
+                        class="range range-xs"
+                        bind:value={mer}
+                    />
+                </div>
+
+                <div class="flex flex-col space-y-2">
+                    <div>
+                        % reinvested into Marketing <span class="font-bold"
+                            >{percentageInvestedMarketing}</span
+                        >
+                    </div>
+                    <input
+                        type="range"
+                        min={0}
+                        max={1}
+                        step={0.01}
+                        class="range range-xs"
+                        bind:value={percentageInvestedMarketing}
+                    />
+                </div>
+
+                <div class="flex justify-between pr-5 mt-5 tabular-nums">
+                    <div>
+                        <div>Value obtained from reinvestment in marketing</div>
+                    </div>
+
+                    <div class="font-semibold">
+                        {totalMarketingReturn.toLocaleString() + "€"}
+                    </div>
                 </div>
             </Section>
         </div>
