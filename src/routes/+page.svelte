@@ -186,7 +186,7 @@
         />
     </Section>
 
-    <div class="mt-5 md:grid md:grid-cols-2 md:gap-10">
+    <div class="mt-5 grid grid-cols-1 md:grid-cols-2 gap-5">
         <div class="grid gap-5">
             <Section>
                 <h2 class="font-bold text-2xl">Revenue</h2>
