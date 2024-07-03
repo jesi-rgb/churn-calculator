@@ -1,6 +1,7 @@
 <script lang="ts">
     import Input from "$lib/components/Input.svelte";
     import Range from "$lib/components/Range.svelte";
+    import Section from "$lib/components/Section.svelte";
 
     import { Tooltip } from "bits-ui";
     import { fly } from "svelte/transition";
@@ -54,14 +55,14 @@
     $: ltvGraphextLoss = ltv * nClients * churnRateGraphext * years;
 
     $: clientsAddressed = nClients * topClientsAddressed;
+
     $: clientsNotAddressed = nClients * (1 - topClientsAddressed);
+
     $: valueLostNotAddressed =
-        clientsNotAddressed *
-        acv *
-        percentageLostNotAddressed *
-        estimatedLifeTime;
+        clientsNotAddressed * percentageLostNotAddressed * acv * years;
 
     // differences
+
     $: differenceChurnedRevenue =
         totalChurnedRevenue - totalRevenueChurnGraphext;
 
@@ -174,138 +175,166 @@
         </table>
     </div>
 
-    <div class="md:px-[1rem]">
-        <h2 class="font-bold text-2xl mt-10">Revenue</h2>
-        <Input name="№ Clients" bind:value={nClients} min={0} step={10} />
-        <Input
-            name="Annual Contract Value (avg)"
-            bind:value={acv}
-            min={0}
-            step={10}
-        />
-
-        <Input
-            name="Estimated Client Lifetime (years)"
-            bind:value={estimatedLifeTime}
-            min={0}
-            step={0.5}
-        />
-
-        <h2 class="font-bold text-2xl mt-10">Marketing</h2>
+    <Section>
         <Range
-            min={1}
-            max={10}
-            step={0.1}
-            name="MER (Marketing Efficiency Ratio)"
-            bind:value={mer}
-            valueDisplay={mer.toFixed(1)}
+            min={0.25}
+            max={5}
+            step={0.25}
+            name="Time elapsed (years)"
+            valueDisplay={years}
+            bind:value={years}
         />
+    </Section>
 
-        <div class="flex justify-between pr-5 mb-3 tabular-nums">
-            <div>
-                <div>Value obtained from reinvestment in marketing</div>
-            </div>
-
-            <div class="font-semibold">
-                {(combinedDifference * mer).toLocaleString() + "€"}
-            </div>
-        </div>
-
-        <h2 class="font-bold text-2xl mt-10">Churn</h2>
-        <div class="w-full">
-            <Range
-                min={0}
-                max={0.4}
-                step={0.01}
-                name="Churn Rate (annual)"
-                bind:value={churnRate}
-                valueDisplay={(churnRate * 100).toFixed(0) + "%"}
-            />
-            <Range
-                min={0}
-                max={0.4}
-                step={0.01}
-                name="Churn Rate (annual, with Predictive Model)"
-                bind:value={churnRateGraphext}
-                valueDisplay={(churnRateGraphext * 100).toFixed(0) + "%"}
-            />
-            <Range
-                min={0.25}
-                max={5}
-                step={0.25}
-                name="Time elapsed (years)"
-                valueDisplay={years}
-                bind:value={years}
-            />
-        </div>
-
-        <h2 class="font-bold text-2xl mt-10">Account Management Cost</h2>
-
-        <Input
-            name="Account Manager Salary (annual)"
-            bind:value={accManagerSalary}
-            min={0}
-            step={500}
-        />
-
-        <Input
-            name="Clients per Acc. Manager (month)"
-            bind:value={clientsPerManagerMonth}
-            min={0}
-        />
-
-        <div class="flex justify-between pr-5 mb-3 tabular-nums">
-            <div>№ Acc Managers necessary to address every client</div>
-            <div class="font-semibold">
-                {nAccManagers}
-            </div>
-        </div>
-
-        <div class="flex justify-between pr-5 mb-3 tabular-nums">
-            <div>№ Acc Managers (with Predictive Model)</div>
-            <div class="font-semibold">
-                {nAccManagersGraphext}
-            </div>
-        </div>
-
-        <div class="divider"></div>
-
-        <div class="mb-3">
-            <Range
-                name="Top % of clients addressed:"
-                bind:value={topClientsAddressed}
-                valueDisplay={`${(topClientsAddressed * 100).toFixed(0)}% of ${nClients} = ${nClients * topClientsAddressed} clients`}
-                min={0.1}
-                max={0.8}
-                step={0.05}
-            ></Range>
-            <span class="text-sm opacity-50 -mt-9"
-                >The percentage of clients you're left with after the model's
-                classification
-            </span>
-        </div>
-
-        <div class="flex justify-between pr-5 mb-3 tabular-nums">
-            <div>
-                <div>Value lost due to unattended clients</div>
-                <span class="text-sm opacity-50">
-                    Assuming {percentageLostNotAddressed * 100}% of unattended
-                    clients leave
-                </span>
-
-                <input
-                    type="range"
-                    class="range range-xs"
+    <div class="mt-5 md:grid md:grid-cols-2 md:gap-10">
+        <div class="grid gap-5">
+            <Section>
+                <h2 class="font-bold text-2xl">Revenue</h2>
+                <Input
+                    name="№ Clients"
+                    bind:value={nClients}
                     min={0}
-                    max={1}
-                    step={0.1}
-                    bind:value={percentageLostNotAddressed}
+                    step={10}
                 />
-            </div>
+                <Input
+                    name="Annual Contract Value (avg)"
+                    bind:value={acv}
+                    min={0}
+                    step={10}
+                />
 
-            <div class="font-semibold">
-                {valueLostNotAddressed.toLocaleString() + "€"}
-            </div>
+                <Input
+                    name="Estimated Client Lifetime (years)"
+                    bind:value={estimatedLifeTime}
+                    min={0}
+                    step={0.5}
+                />
+            </Section>
+
+            <Section>
+                <h2 class="font-bold text-2xl">Account Management Cost</h2>
+
+                <Input
+                    name="Account Manager Salary (annual)"
+                    bind:value={accManagerSalary}
+                    min={0}
+                    step={500}
+                />
+
+                <Input
+                    name="Clients per Acc. Manager (month)"
+                    bind:value={clientsPerManagerMonth}
+                    min={0}
+                />
+
+                <div class="flex justify-between pr-5 mb-3 tabular-nums">
+                    <div>№ Acc Managers necessary to address every client</div>
+                    <div class="font-semibold">
+                        {nAccManagers}
+                    </div>
+                </div>
+
+                <div class="flex justify-between pr-5 mb-3 tabular-nums">
+                    <div>№ Acc Managers (with Predictive Model)</div>
+                    <div class="font-semibold">
+                        {nAccManagersGraphext}
+                    </div>
+                </div>
+
+                <div class="divider"></div>
+
+                <div class="mb-3">
+                    <Range
+                        name="Top % of clients addressed:"
+                        bind:value={topClientsAddressed}
+                        valueDisplay={`${(topClientsAddressed * 100).toFixed(0)}% of ${nClients} = ${clientsAddressed} clients`}
+                        min={0.1}
+                        max={0.8}
+                        step={0.05}
+                    ></Range>
+                    <span class="text-sm opacity-50 -mt-9"
+                        >The percentage of clients you're left with after the
+                        model's classification
+                    </span>
+                </div>
+
+                <div class="flex justify-between pr-5 mb-3 tabular-nums">
+                    <div>
+                        <div>Value lost due to unattended clients</div>
+                        <span class="text-sm opacity-50">
+                            Assuming {percentageLostNotAddressed * 100}% of
+                            unattended clients leave
+                        </span>
+
+                        <input
+                            type="range"
+                            class="range range-xs"
+                            min={0}
+                            max={1}
+                            step={0.1}
+                            bind:value={percentageLostNotAddressed}
+                        />
+                    </div>
+
+                    <div class="font-semibold">
+                        {valueLostNotAddressed.toLocaleString() + "€"}
+                    </div>
+                </div>
+            </Section>
+        </div>
+
+        <div class="grid h-fit gap-5">
+            <Section>
+                <h2 class="font-bold text-2xl">Marketing</h2>
+                <div class="flex flex-col space-y-3">
+                    <div>
+                        MER (Marketing Efficiency Ratio) <span class="font-bold"
+                            >{mer.toFixed(1)}</span
+                        >
+                    </div>
+                    <input
+                        type="range"
+                        min={1}
+                        max={10}
+                        step={0.1}
+                        class="range range-xs"
+                        bind:value={mer}
+                    />
+                </div>
+
+                <div class="flex justify-between pr-5 mt-3 tabular-nums">
+                    <div>
+                        <div>Value obtained from reinvestment in marketing</div>
+                    </div>
+
+                    <div class="font-semibold">
+                        {(combinedDifference * mer).toLocaleString() + "€"}
+                    </div>
+                </div>
+            </Section>
+
+            <Section>
+                <h2 class="font-bold text-2xl">Churn</h2>
+                <div class="w-full">
+                    <Range
+                        min={0}
+                        max={0.4}
+                        step={0.01}
+                        name="Churn Rate (annual)"
+                        bind:value={churnRate}
+                        valueDisplay={(churnRate * 100).toFixed(0) + "%"}
+                    />
+                    <Range
+                        min={0}
+                        max={0.4}
+                        step={0.01}
+                        name="Churn Rate (annual, with Predictive Model)"
+                        bind:value={churnRateGraphext}
+                        valueDisplay={(churnRateGraphext * 100).toFixed(0) +
+                            "%"}
+                    />
+                </div>
+            </Section>
         </div>
     </div>
 </div>
