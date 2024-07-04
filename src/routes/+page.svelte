@@ -19,6 +19,7 @@
         topClientsAddressed = 0.7,
         valueLostNotAddressed = 0, //will be calculated
         cumulativeChurnNotAddresed = 0.04, //will be calculated
+        percentageActuallyChurns = 0.5,
         accManagerSalary = 30000,
         mer = 3,
         percentageInvestedMarketing = 0.6,
@@ -60,7 +61,11 @@
     $: clientsNotAddressed = nClients * (1 - topClientsAddressed);
 
     $: valueLostNotAddressed =
-        clientsNotAddressed * cumulativeChurnNotAddresed * acv * years;
+        clientsNotAddressed *
+        cumulativeChurnNotAddresed *
+        percentageActuallyChurns *
+        acv *
+        years;
 
     // differences
 
@@ -258,62 +263,6 @@
                         {nAccManagersGraphext}
                     </div>
                 </div>
-
-                <div class="divider"></div>
-
-                <div class="mb-3">
-                    <Range
-                        name="Top % of clients addressed:"
-                        bind:value={topClientsAddressed}
-                        valueDisplay={`${(topClientsAddressed * 100).toFixed(0)}% of ${nClients} = ${Math.ceil(clientsAddressed)} clients`}
-                        min={0.1}
-                        max={0.8}
-                        step={0.05}
-                    ></Range>
-                    <span class="text-sm opacity-50 -mt-9"
-                        >The percentage of clients you're left with after the
-                        model's classification
-                    </span>
-                </div>
-
-                <div class="flex justify-between pr-5 mb-3 tabular-nums">
-                    <div>
-                        <div>
-                            Total Churn <b>Predicted</b> for unattended clients
-                        </div>
-                        <span class="text-sm opacity-50">
-                            Assuming {(
-                                cumulativeChurnNotAddresed * 100
-                            ).toFixed(0)}% of unattended clients leave
-                        </span>
-
-                        <input
-                            type="range"
-                            class="range range-xs"
-                            min={0}
-                            max={0.3}
-                            step={0.01}
-                            bind:value={cumulativeChurnNotAddresed}
-                        />
-                    </div>
-
-                    <div class="font-semibold">
-                        {(cumulativeChurnNotAddresed * 100).toFixed(0)}%
-                    </div>
-                </div>
-                <div class="flex justify-between pr-5 mb-3 tabular-nums">
-                    <div>
-                        <div>Value lost due to unattended clients</div>
-                        <span class="text-sm opacity-50">
-                            Assuming all clients predicted to churn actually
-                            churn
-                        </span>
-                    </div>
-
-                    <div class="font-semibold">
-                        {valueLostNotAddressed.toLocaleString() + "€"}
-                    </div>
-                </div>
             </Section>
         </div>
 
@@ -383,6 +332,82 @@
                     <div class="font-semibold">
                         {Math.round(totalMarketingReturn).toLocaleString() +
                             "€"}
+                    </div>
+                </div>
+            </Section>
+
+            <Section>
+                <h2 class="font-bold text-2xl mb-3">
+                    Predictors and adjustments
+                </h2>
+                <div class="mb-3">
+                    <Range
+                        name="Top % of clients addressed:"
+                        bind:value={topClientsAddressed}
+                        valueDisplay={(topClientsAddressed * 100).toFixed(0) +
+                            "%"}
+                        min={0.1}
+                        max={0.8}
+                        step={0.05}
+                    >
+                        <span slot="description" class="text-sm opacity-50"
+                            >The percentage of clients you're left with after
+                            the model's classification: <b
+                                >{Math.ceil(clientsAddressed)}</b
+                            > clients
+                        </span>
+                    </Range>
+                </div>
+
+                <Range
+                    name="Total Churn Predicted for unattended clients"
+                    bind:value={cumulativeChurnNotAddresed}
+                    valueDisplay={(cumulativeChurnNotAddresed * 100).toFixed(
+                        0,
+                    ) + "%"}
+                    min={0.0}
+                    max={0.6}
+                    step={0.01}
+                >
+                    <div
+                        slot="description"
+                        class="text-sm opacity-50 tabular-nums"
+                    >
+                        {Math.round(clientsNotAddressed)} unattended clients have
+                        a total churn probability of {(
+                            cumulativeChurnNotAddresed * 100
+                        ).toFixed(0)}%
+                    </div>
+                </Range>
+
+                <Range
+                    name="Percentage of clients acutually leaving"
+                    min={0}
+                    max={1}
+                    step={0.01}
+                    bind:value={percentageActuallyChurns}
+                    valueDisplay={(percentageActuallyChurns * 100).toFixed(0) +
+                        "%"}
+                >
+                    <div slot="description" class="text-sm opacity-50">
+                        Out of those we are leaving unattended
+                    </div>
+                </Range>
+
+                <div class="flex justify-between tabular-nums">
+                    <div>
+                        <div>Value lost due to unattended clients</div>
+                        <span class="text-sm tabular-nums opacity-50">
+                            {Math.round(
+                                clientsNotAddressed *
+                                    percentageActuallyChurns *
+                                    cumulativeChurnNotAddresed,
+                            )} clients
+                        </span>
+                    </div>
+
+                    <div class="font-semibold">
+                        {valueLostNotAddressed.toLocaleString() + "€"}
                     </div>
                 </div>
             </Section>

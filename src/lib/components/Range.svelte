@@ -10,18 +10,22 @@
     export let step = 0.01;
 </script>
 
-<div class="flex flex-col items-center w-full md:flex-row mb-2">
-    <label for={name} class="w-full md:w-1/2"
-        >{name}
-        <span class="font-bold tabular-nums">{valueDisplay}</span></label
-    >
-    <input
-        {name}
-        class="range range-xs md:w-1/2"
-        type="range"
-        {min}
-        {max}
-        {step}
-        bind:value
-    />
+<div class="mb-3">
+    <div class="w-full mb-1">
+        <div class="flex justify-between">
+            <label for={name} class="w-full">{name}</label>
+            <span class="font-bold tabular-nums text-right">{valueDisplay}</span
+            >
+        </div>
+        <input
+            {name}
+            class="range range-xs"
+            type="range"
+            {min}
+            {max}
+            {step}
+            bind:value
+        />
+    </div>
+    <slot name="description"></slot>
 </div>
