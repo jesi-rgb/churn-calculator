@@ -69,12 +69,12 @@
 
     // differences
 
-    $: differenceChurnedRevenue =
-        totalChurnedRevenue - totalRevenueChurnGraphext;
+    // $: differenceChurnedRevenue =
+    //     totalChurnedRevenue - totalRevenueChurnGraphext;
+    //
+    // $: differenceRevenue = totalRevenueGraphext - totalRevenue;
 
     $: differenceTotalCost = totalCost - totalCostGraphext;
-
-    $: differenceRevenue = totalRevenueGraphext - totalRevenue;
 
     $: ltvLossDifference = ltvCurrentLoss - ltvGraphextLoss;
 
@@ -94,7 +94,7 @@
 </p>
 
 <div
-    class="flex flex-col md:flex-row md:text-center gap-3 md:items-end justify-around mb-5 sticky bg-base-100/80 shadow-sm shadow-base-300 backdrop-blur z-10 top-0 py-5"
+    class="flex flex-col md:flex-row md:text-center px-3 gap-3 md:items-end justify-around mb-5 sticky bg-base-100/80 shadow-sm shadow-base-300 backdrop-blur z-10 top-0 py-5"
 >
     <div>
         <div class="text-xl">Total Growth</div>
@@ -381,7 +381,7 @@
                 </Range>
 
                 <Range
-                    name="Percentage of clients acutually leaving"
+                    name="Percentage of clients actually leaving"
                     min={0}
                     max={1}
                     step={0.01}

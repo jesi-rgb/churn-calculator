@@ -10,7 +10,7 @@
     export let step = 0.01;
 </script>
 
-<div class="mb-5">
+<div class="">
     <div class="w-full mb-1">
         <div class="flex justify-between">
             <label for={name} class="w-full">{name}</label>
