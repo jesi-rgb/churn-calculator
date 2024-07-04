@@ -18,7 +18,7 @@
         clientsPerManagerMonth = 20,
         topClientsAddressed = 0.7,
         valueLostNotAddressed = 0, //will be calculated
-        percentageLostNotAddressed = 0.3, //will be calculated
+        cumulativeChurnNotAddresed = 0.04, //will be calculated
         accManagerSalary = 30000,
         mer = 3,
         percentageInvestedMarketing = 0.6,
@@ -60,7 +60,7 @@
     $: clientsNotAddressed = nClients * (1 - topClientsAddressed);
 
     $: valueLostNotAddressed =
-        clientsNotAddressed * percentageLostNotAddressed * acv * years;
+        clientsNotAddressed * cumulativeChurnNotAddresed * acv * years;
 
     // differences
 
@@ -73,10 +73,11 @@
 
     $: ltvLossDifference = ltvCurrentLoss - ltvGraphextLoss;
 
-    $: combinedDifference = differenceTotalCost + ltvLossDifference;
+    $: combinedDifference =
+        differenceTotalCost + ltvLossDifference - valueLostNotAddressed;
 
     $: totalMarketingReturn =
-        combinedDifference * mer * percentageInvestedMarketing;
+        differenceTotalCost * mer * percentageInvestedMarketing;
 </script>
 
 <h1 class="font-bold text-4xl mb-3">Churn Calculator</h1>
@@ -88,7 +89,7 @@
 </p>
 
 <div
-    class="flex flex-col md:flex-row md:text-center gap-3 md:items-end justify-around mb-5"
+    class="flex flex-col md:flex-row md:text-center gap-3 md:items-end justify-around mb-5 sticky bg-base-100/80 shadow-sm shadow-base-300 backdrop-blur z-10 top-0 py-5"
 >
     <div>
         <div class="text-xl">Total Growth</div>
@@ -277,20 +278,36 @@
 
                 <div class="flex justify-between pr-5 mb-3 tabular-nums">
                     <div>
-                        <div>Value lost due to unattended clients</div>
+                        <div>
+                            Total Churn <b>Predicted</b> for unattended clients
+                        </div>
                         <span class="text-sm opacity-50">
-                            Assuming {percentageLostNotAddressed * 100}% of
-                            unattended clients leave
+                            Assuming {(
+                                cumulativeChurnNotAddresed * 100
+                            ).toFixed(0)}% of unattended clients leave
                         </span>
 
                         <input
                             type="range"
                             class="range range-xs"
                             min={0}
-                            max={1}
-                            step={0.1}
-                            bind:value={percentageLostNotAddressed}
+                            max={0.3}
+                            step={0.01}
+                            bind:value={cumulativeChurnNotAddresed}
                         />
+                    </div>
+
+                    <div class="font-semibold">
+                        {(cumulativeChurnNotAddresed * 100).toFixed(0)}%
+                    </div>
+                </div>
+                <div class="flex justify-between pr-5 mb-3 tabular-nums">
+                    <div>
+                        <div>Value lost due to unattended clients</div>
+                        <span class="text-sm opacity-50">
+                            Assuming all clients predicted to churn actually
+                            churn
+                        </span>
                     </div>
 
                     <div class="font-semibold">
