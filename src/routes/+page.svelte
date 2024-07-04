@@ -210,7 +210,7 @@
     </Section>
 
     <div class="mt-5 grid grid-cols-1 md:grid-cols-2 gap-5">
-        <div class="grid gap-5">
+        <div class="flex flex-col gap-5">
             <Section>
                 <h2 class="font-bold text-2xl mb-3">Revenue</h2>
                 <Input
@@ -266,7 +266,7 @@
             </Section>
         </div>
 
-        <div class="grid h-fit gap-5">
+        <div class="flex flex-col h-fit gap-5">
             <Section>
                 <h2 class="font-bold text-2xl mb-3">Churn</h2>
                 <div class="w-full">
@@ -324,7 +324,7 @@
                     />
                 </div>
 
-                <div class="flex justify-between pr-5 mt-5 tabular-nums">
+                <div class="flex justify-between mt-5 tabular-nums">
                     <div>
                         <div>Value obtained from reinvestment in marketing</div>
                     </div>
@@ -373,8 +373,8 @@
                         slot="description"
                         class="text-sm opacity-50 tabular-nums"
                     >
-                        {Math.round(clientsNotAddressed)} unattended clients have
-                        a total churn probability of {(
+                        <b>{Math.round(clientsNotAddressed)}</b> unattended
+                        clients have a total churn probability of {(
                             cumulativeChurnNotAddresed * 100
                         ).toFixed(0)}%
                     </div>
@@ -390,7 +390,8 @@
                         "%"}
                 >
                     <div slot="description" class="text-sm opacity-50">
-                        Out of those we are leaving unattended
+                        Out of those we are leaving unattended, weighing in the
+                        predicted churn probability
                     </div>
                 </Range>
 
@@ -398,16 +399,19 @@
                     <div>
                         <div>Value lost due to unattended clients</div>
                         <span class="text-sm tabular-nums opacity-50">
-                            {Math.round(
-                                clientsNotAddressed *
-                                    percentageActuallyChurns *
-                                    cumulativeChurnNotAddresed,
-                            )} clients
+                            <b
+                                >{Math.round(
+                                    clientsNotAddressed *
+                                        percentageActuallyChurns *
+                                        cumulativeChurnNotAddresed,
+                                )}</b
+                            > clients would actually leave
                         </span>
                     </div>
 
                     <div class="font-semibold">
-                        {valueLostNotAddressed.toLocaleString() + "€"}
+                        {Math.round(valueLostNotAddressed).toLocaleString() +
+                            "€"}
                     </div>
                 </div>
             </Section>

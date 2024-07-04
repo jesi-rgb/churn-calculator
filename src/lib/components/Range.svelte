@@ -10,7 +10,7 @@
     export let step = 0.01;
 </script>
 
-<div class="mb-3">
+<div class="mb-5">
     <div class="w-full mb-1">
         <div class="flex justify-between">
             <label for={name} class="w-full">{name}</label>
@@ -27,5 +27,7 @@
             bind:value
         />
     </div>
-    <slot name="description"></slot>
+    <div class="text-balance">
+        <slot name="description"></slot>
+    </div>
 </div>
