@@ -85,6 +85,19 @@
         differenceTotalCost * mer * percentageInvestedMarketing;
 </script>
 
+<head>
+    <title>Churn Calculator</title>
+
+    <meta charset="UTF-8" />
+    <meta
+        name="description"
+        content="Churn Calculator: calculate different metrics regarding churn."
+    />
+    <meta name="keywords" content="Churn, Lead Scoring, Finance" />
+    <meta name="author" content="Jesús Rascón, Andrés Lozano – Graphext" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+</head>
+
 <h1 class="font-bold text-4xl mb-3">Churn Calculator</h1>
 
 <p class="opacity-50 mb-5 md:w-1/2">
