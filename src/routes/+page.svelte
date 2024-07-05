@@ -83,6 +83,9 @@
 
     $: totalMarketingReturn =
         differenceTotalCost * mer * percentageInvestedMarketing;
+
+    $: totalAnswer =
+        ltvLossDifference + totalMarketingReturn - valueLostNotAddressed;
 </script>
 
 <head>
@@ -107,9 +110,9 @@
 </p>
 
 <div
-    class="flex flex-col md:flex-row md:text-center px-3 gap-3 md:items-end justify-around mb-5 sticky bg-base-100/80 shadow-sm shadow-base-300 backdrop-blur z-10 top-0 py-5"
+    class="flex flex-col md:flex-row text-center px-3 gap-3 mb-5 sticky bg-base-100/80 shadow-sm shadow-base-300 backdrop-blur z-[1] top-0 py-5"
 >
-    <div>
+    <div class="w-fit mx-auto">
         <div class="text-xl">Total Growth</div>
 
         <Tooltip.Root openDelay={0}>
@@ -127,7 +130,7 @@
                     }}
                     class="text-3xl font-bold tabular-nums"
                 >
-                    {combinedDifference.toLocaleString()}€
+                    {totalAnswer.toLocaleString()}€
                 </div>
             </Tooltip.Trigger>
             <Tooltip.Content
@@ -136,7 +139,7 @@
                 sideOffset={0}
             >
                 <div
-                    class="flex bg-base-100 border-base-content/30 items-center text-balance w-40 shadow-sm text-center justify-center rounded-input border p-3 text-sm outline-none"
+                    class="flex bg-base-100 border-base-content/30 items-center text-balance w-40 shadow-sm text-center justify-center rounded-input border p-3 text-sm outline-none z-[20]"
                 >
                     Total amount is the sum of the two highlighted values
                 </div>
@@ -146,15 +149,6 @@
                 />
             </Tooltip.Content>
         </Tooltip.Root>
-    </div>
-
-    <div class="flex flex-col tabular-nums">
-        Return from reinvesting in Marketing {(
-            percentageInvestedMarketing * 100
-        ).toFixed(0)}%
-        <span class="text-3xl tabular-nums font-bold"
-            >{Math.round(totalMarketingReturn).toLocaleString()}€</span
-        >
     </div>
 </div>
 
@@ -206,6 +200,21 @@
                     <td class:hovered class="text-right font-semibold"
                         >{differenceTotalCost.toLocaleString()}€</td
                     >
+                </tr>
+                <tr class="border border-base-content/10">
+                    <th class="flex flex-col"
+                        >Value lost <span
+                            class="text-xs font-semibold opacity-50"
+                            >due to unattended clients</span
+                        >
+                    </th>
+
+                    <td class="text-right"></td>
+                    <td class="text-right"
+                        >{valueLostNotAddressed.toLocaleString()}€</td
+                    >
+
+                    <td class:hovered class="text-right font-semibold"></td>
                 </tr>
             </tbody>
         </table>
@@ -263,17 +272,34 @@
                     min={0}
                 />
 
-                <div class="flex justify-between pr-5 mb-3 tabular-nums">
+                <div class="flex justify-between mb-3 tabular-nums">
                     <div>№ Acc Managers necessary to address every client</div>
                     <div class="font-semibold">
                         {nAccManagers}
                     </div>
                 </div>
 
-                <div class="flex justify-between pr-5 mb-3 tabular-nums">
+                <div class="flex justify-between mb-3 tabular-nums">
                     <div>№ Acc Managers (with Predictive Model)</div>
                     <div class="font-semibold">
                         {nAccManagersGraphext}
+                    </div>
+                </div>
+
+                <div class="flex justify-between mb-3 tabular-nums">
+                    <div>Difference</div>
+                    <div class="font-semibold">
+                        {nAccManagers - nAccManagersGraphext}
+                    </div>
+                </div>
+                <div class="flex justify-between mb-3 tabular-nums">
+                    <div>Savings (yearly)</div>
+                    <div class="font-semibold tabular-nums">
+                        {(
+                            (nAccManagers - nAccManagersGraphext) *
+                            accManagerSalaryYearly *
+                            years
+                        ).toLocaleString() + "€"}
                     </div>
                 </div>
             </Section>
@@ -305,37 +331,26 @@
 
             <Section>
                 <h2 class="font-bold text-2xl mb-3">Marketing</h2>
-                <div class="flex flex-col space-y-2 mb-5">
-                    <div>
-                        MER (Marketing Efficiency Ratio) <span class="font-bold"
-                            >{mer.toFixed(1)}</span
-                        >
-                    </div>
-                    <input
-                        type="range"
-                        min={1}
-                        max={10}
-                        step={0.1}
-                        class="range range-xs"
-                        bind:value={mer}
-                    />
-                </div>
 
-                <div class="flex flex-col space-y-2">
-                    <div>
-                        % reinvested into Marketing <span class="font-bold"
-                            >{percentageInvestedMarketing}</span
-                        >
-                    </div>
-                    <input
-                        type="range"
-                        min={0}
-                        max={1}
-                        step={0.01}
-                        class="range range-xs"
-                        bind:value={percentageInvestedMarketing}
-                    />
-                </div>
+                <Range
+                    min={1}
+                    max={10}
+                    step={0.1}
+                    bind:value={mer}
+                    valueDisplay={mer.toFixed(1)}
+                    name="MER (Marketing Efficiency Ratio)"
+                ></Range>
+
+                <Range
+                    min={0}
+                    max={1}
+                    step={0.01}
+                    bind:value={percentageInvestedMarketing}
+                    valueDisplay={(percentageInvestedMarketing * 100).toFixed(
+                        0,
+                    ) + "%"}
+                    name="% reinvested into Marketing"
+                ></Range>
 
                 <div class="flex justify-between mt-5 tabular-nums">
                     <div>

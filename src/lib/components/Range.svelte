@@ -1,8 +1,18 @@
 <script lang="ts">
+    import { queryParam } from "sveltekit-search-params";
+
     export let name;
 
     export let value: number;
 
+    let id = name
+        .toLowerCase()
+        .replaceAll(" ", "")
+        .replaceAll(/[^a-zA-Z0-9]/g, "", "");
+
+    const queryParamValue = queryParam(id);
+
+    $: $queryParamValue = value.toString();
     export let valueDisplay;
 
     export let min = 0;
