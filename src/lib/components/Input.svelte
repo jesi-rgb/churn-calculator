@@ -41,5 +41,8 @@
         {step}
         bind:value
         onClick="this.select()"
+        on:change={() => {
+            $queryParamValue = value;
+        }}
     />
 </div>
