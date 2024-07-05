@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { queryParam } from "sveltekit-search-params";
+    import { ssp, queryParam } from "sveltekit-search-params";
     import { onMount } from "svelte";
 
     export let name;
@@ -13,10 +13,7 @@
         .replaceAll(" ", "")
         .replaceAll(/[^a-zA-Z0-9]/g, "", "");
 
-    const queryParamValue = queryParam(id, {
-        encode: (value: number) => value.toString(),
-        decode: (value: string | null) => (value ? parseInt(value) : null),
-    });
+    const queryParamValue = queryParam(id, ssp.number());
 
     onMount(() => {
         if ($queryParamValue != null) {
