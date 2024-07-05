@@ -4,9 +4,7 @@
     import Section from "$lib/components/Section.svelte";
 
     import { Tooltip } from "bits-ui";
-    import { fly } from "svelte/transition";
-
-    let hovered: boolean = false;
+    import { fly, fade } from "svelte/transition";
 
     let nClients = 9000,
         acv = 3600,
@@ -106,119 +104,107 @@
 <p class="opacity-50 mb-5 md:w-1/2">
     Calculate different metrics regarding customer churn and how much money is
     lost over time. Gain perspective on how much you can grow other aspects of
-    your team.
+    your team with the help of our models.
 </p>
 
 <div
-    class="flex flex-col md:flex-row text-center px-3 gap-3 mb-5 sticky bg-base-100/80 shadow-sm shadow-base-300 backdrop-blur z-[1] top-0 py-5"
+    class="flex flex-col md:flex-row text-center px-3 gap-3 mb-5 sticky bg-base-100/80 border border-base-content/10 shadow-md shadow-base-content/10 rounded-box backdrop-blur z-1 top-0 py-5"
 >
     <div class="w-fit mx-auto">
         <div class="text-xl">Total Growth</div>
-
         <Tooltip.Root openDelay={0}>
-            <Tooltip.Trigger>
-                <div
-                    role="tooltip"
-                    on:focus={() => {
-                        hovered = true;
-                    }}
-                    on:mouseover={() => {
-                        hovered = true;
-                    }}
-                    on:mouseleave={() => {
-                        hovered = false;
-                    }}
-                    class="text-3xl font-bold tabular-nums"
-                >
-                    {totalAnswer.toLocaleString()}€
-                </div>
-            </Tooltip.Trigger>
             <Tooltip.Content
                 transition={fly}
                 transitionConfig={{ y: 8, duration: 150 }}
                 sideOffset={0}
             >
                 <div
-                    class="flex bg-base-100 border-base-content/30 items-center text-balance w-40 shadow-sm text-center justify-center rounded-input border p-3 text-sm outline-none z-[20]"
+                    class="bg-base-100 border-base-content/30 items-center w-[300px] shadow-sm rounded-btn border p-3 text-sm outline-none z-20"
                 >
-                    Total amount is the sum of the two highlighted values
+                    Total growth corresponds to:
+                    <ol class="list list-disc list-inside">
+                        <li>+ Churn Improvement Difference</li>
+                        <li>+ Marketing Reinvestment Value</li>
+                        <li>– Potential Value Lost</li>
+                    </ol>
                 </div>
 
                 <Tooltip.Arrow
                     class="rounded-[2px] border-l border-t border-base-content/30"
                 />
             </Tooltip.Content>
+            <Tooltip.Trigger>
+                {#key totalAnswer}
+                    <div
+                        class="text-3xl tabular-nums inline-block font-bold z-30"
+                    >
+                        {Math.round(totalAnswer).toLocaleString()}€
+                    </div>
+                {/key}
+            </Tooltip.Trigger>
         </Tooltip.Root>
     </div>
 </div>
 
 <div class="mx-auto text-sm md:text-base">
-    <div class="overflow-x-scroll">
-        <table class="table table-xs md:table-md tabular-nums">
-            <thead class="border border-base-content/30">
-                <tr class="text-right border border-base-content/30">
-                    <th></th>
-                    <th>Currently</th>
-                    <th>Using Graphext</th>
-                    <th>Difference</th>
-                </tr>
-            </thead>
-            <tbody class="border border-base-content/10">
-                <tr class="border border-base-content/10">
-                    <th class="flex flex-col transition-colors"
-                        >Lifetime Value Lost <span
-                            class="text-xs font-semibold opacity-50"
-                            >(money lost due to churn based on estimated client
-                            LTV)</span
-                        >
-                    </th>
+    <table class="table table-xs md:table-md tabular-nums mb-5 -z-10">
+        <thead class="border border-base-content/30">
+            <tr class="text-right border border-base-content/30">
+                <th></th>
+                <th>Currently</th>
+                <th>Using Graphext</th>
+                <th>Difference</th>
+            </tr>
+        </thead>
+        <tbody class="border border-base-content/10">
+            <tr class="border border-base-content/10">
+                <th class="flex flex-col transition-colors"
+                    >Churn Improvement<span
+                        class="text-xs font-semibold opacity-50"
+                        >(money lost due to churn based on estimated client LTV)</span
+                    >
+                </th>
 
-                    <td class="text-right"
-                        >{ltvCurrentLoss.toLocaleString()}€</td
+                <td class="text-right">{ltvCurrentLoss.toLocaleString()}€</td>
+                <td class="text-right">{ltvGraphextLoss.toLocaleString()}€</td>
+                <td class="text-right font-semibold text-primary"
+                    >{ltvLossDifference.toLocaleString()}€</td
+                >
+            </tr>
+            <tr class="border border-base-content/10">
+                <th class="flex flex-col"
+                    >Resource Shift<span
+                        class="text-xs font-semibold opacity-50"
+                        >(money saved in salaries in {years}
+                        {years == 1 ? "year" : "years"})</span
                     >
-                    <td class="text-right"
-                        >{ltvGraphextLoss.toLocaleString()}€</td
-                    >
-                    <td class:hovered class="text-right font-semibold"
-                        >{ltvLossDifference.toLocaleString()}€</td
-                    >
-                </tr>
-                <tr class="border border-base-content/10">
-                    <th class="flex flex-col"
-                        >Total Cost <span
-                            class="text-xs font-semibold opacity-50"
-                            >(money spent in salaries in {years}
-                            {years == 1 ? "year" : "years"})</span
-                        >
-                    </th>
+                </th>
 
-                    <td class="text-right">{totalCost.toLocaleString()}€</td>
-                    <td class="text-right"
-                        >{totalCostGraphext.toLocaleString()}€</td
-                    >
+                <td class="text-right">{totalCost.toLocaleString()}€</td>
+                <td class="text-right">{totalCostGraphext.toLocaleString()}€</td
+                >
 
-                    <td class:hovered class="text-right font-semibold"
-                        >{differenceTotalCost.toLocaleString()}€</td
+                <td class="text-right font-semibold text-primary"
+                    >{differenceTotalCost.toLocaleString()}€</td
+                >
+            </tr>
+            <tr class="border border-base-content/10">
+                <th class="flex flex-col"
+                    >Potential Value lost<span
+                        class="text-xs font-semibold opacity-50"
+                        >due to unattended clients</span
                     >
-                </tr>
-                <tr class="border border-base-content/10">
-                    <th class="flex flex-col"
-                        >Value lost <span
-                            class="text-xs font-semibold opacity-50"
-                            >due to unattended clients</span
-                        >
-                    </th>
+                </th>
 
-                    <td class="text-right"></td>
-                    <td class="text-right"
-                        >{valueLostNotAddressed.toLocaleString()}€</td
-                    >
+                <td class="text-right"></td>
+                <td class="text-right text-error"
+                    >{valueLostNotAddressed.toLocaleString()}€</td
+                >
 
-                    <td class:hovered class="text-right font-semibold"></td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
+                <td class="text-right font-semibold"></td>
+            </tr>
+        </tbody>
+    </table>
 
     <Section>
         <Range
@@ -257,7 +243,7 @@
             </Section>
 
             <Section>
-                <h2 class="font-bold text-2xl mb-3">Account Management Cost</h2>
+                <h2 class="font-bold text-2xl mb-3">Salary Expenses</h2>
 
                 <Input
                     name="Account Manager Salary (annual)"
@@ -272,17 +258,29 @@
                     min={0}
                 />
 
-                <div class="flex justify-between mb-3 tabular-nums">
-                    <div>№ Acc Managers necessary to address every client</div>
-                    <div class="font-semibold">
-                        {nAccManagers}
+                <div class=" mb-3 tabular-nums">
+                    <div class="flex justify-between">
+                        <div>
+                            № Acc Managers necessary to address every client
+                        </div>
+                        <div class="font-semibold">
+                            {nAccManagers}
+                        </div>
+                    </div>
+                    <div class="text-sm opacity-70 tabular-nums">
+                        Account managers needed to deal with {nClients} clients
                     </div>
                 </div>
 
-                <div class="flex justify-between mb-3 tabular-nums">
-                    <div>№ Acc Managers (with Predictive Model)</div>
-                    <div class="font-semibold">
-                        {nAccManagersGraphext}
+                <div class=" mb-3 tabular-nums">
+                    <div class="flex justify-between">
+                        <div>№ Acc Managers (with Predictive Model)</div>
+                        <div class="font-semibold">
+                            {nAccManagersGraphext}
+                        </div>
+                    </div>
+                    <div class="text-sm opacity-70 tabular-nums">
+                        Account managers needed to deal with {clientsAddressed} clients
                     </div>
                 </div>
 
@@ -292,14 +290,19 @@
                         {nAccManagers - nAccManagersGraphext}
                     </div>
                 </div>
-                <div class="flex justify-between mb-3 tabular-nums">
-                    <div>Savings (yearly)</div>
-                    <div class="font-semibold tabular-nums">
-                        {(
-                            (nAccManagers - nAccManagersGraphext) *
-                            accManagerSalaryYearly *
-                            years
-                        ).toLocaleString() + "€"}
+                <div class="mb-3 tabular-nums">
+                    <div class="flex justify-between">
+                        <div>Savings (yearly)</div>
+                        <div class="font-semibold tabular-nums">
+                            {(
+                                (nAccManagers - nAccManagersGraphext) *
+                                accManagerSalaryYearly *
+                                years
+                            ).toLocaleString() + "€"}
+                        </div>
+                    </div>
+                    <div class="opacity-70 text-sm">
+                        Resources available for reallocation in other areas
                     </div>
                 </div>
             </Section>
@@ -307,13 +310,13 @@
 
         <div class="flex flex-col h-fit gap-5">
             <Section>
-                <h2 class="font-bold text-2xl mb-3">Churn</h2>
+                <h2 class="font-bold text-2xl mb-3">Churn Simulation</h2>
                 <div class="w-full">
                     <Range
                         min={0}
                         max={0.4}
                         step={0.01}
-                        name="Churn Rate (annual)"
+                        name="Current Churn Rate (annual)"
                         bind:value={churnRate}
                         valueDisplay={(churnRate * 100).toFixed(0) + "%"}
                     />
@@ -321,7 +324,7 @@
                         min={0}
                         max={0.4}
                         step={0.01}
-                        name="Churn Rate (annual, with Predictive Model)"
+                        name="Predicted Churn Rate (annual)"
                         bind:value={churnRateGraphext}
                         valueDisplay={(churnRateGraphext * 100).toFixed(0) +
                             "%"}
@@ -330,7 +333,7 @@
             </Section>
 
             <Section>
-                <h2 class="font-bold text-2xl mb-3">Marketing</h2>
+                <h2 class="font-bold text-2xl mb-3">Marketing Efficiency</h2>
 
                 <Range
                     min={1}
@@ -366,7 +369,7 @@
 
             <Section>
                 <h2 class="font-bold text-2xl mb-3">
-                    Predictors and adjustments
+                    Predictive Model Simulation
                 </h2>
                 <div class="mb-3">
                     <Range
@@ -448,7 +451,7 @@
 </div>
 
 <style>
-    .hovered {
-        @apply text-primary transition-all duration-100 transform -translate-y-1;
+    li {
+        list-style-type: "   ";
     }
 </style>

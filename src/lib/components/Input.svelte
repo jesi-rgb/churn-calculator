@@ -8,10 +8,7 @@
     export let value: number;
     export let step = 1;
 
-    let id = name
-        .toLowerCase()
-        .replaceAll(" ", "")
-        .replaceAll(/[^a-zA-Z0-9]/g, "", "");
+    let id = name.replaceAll(" ", "").replaceAll(/[^a-zA-Z0-9]/g, "", "");
 
     const queryParamValue = queryParam(id, ssp.number());
 
@@ -20,8 +17,6 @@
             value = $queryParamValue;
         }
     });
-
-    // $: $queryParamValue = value;
 </script>
 
 <div

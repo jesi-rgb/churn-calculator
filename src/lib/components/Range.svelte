@@ -6,10 +6,7 @@
 
     export let value: number;
 
-    let id = name
-        .toLowerCase()
-        .replaceAll(" ", "")
-        .replaceAll(/[^a-zA-Z0-9]/g, "", "");
+    let id = name.replaceAll(" ", "").replaceAll(/[^a-zA-Z0-9]/g, "", "");
 
     const queryParamValue = queryParam(id, ssp.number());
 
