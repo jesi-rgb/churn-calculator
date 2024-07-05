@@ -243,7 +243,7 @@
             </Section>
 
             <Section>
-                <h2 class="font-bold text-2xl mb-3">Salary Expenses</h2>
+                <h2 class="font-bold text-2xl mb-3">Resource Shift</h2>
 
                 <Input
                     name="Account Manager Salary (annual)"
@@ -293,7 +293,7 @@
                 <div class="mb-3 tabular-nums">
                     <div class="flex justify-between">
                         <div>Savings (yearly)</div>
-                        <div class="font-semibold tabular-nums">
+                        <div class="font-semibold tabular-nums text-primary">
                             {(
                                 (nAccManagers - nAccManagersGraphext) *
                                 accManagerSalaryYearly *
@@ -360,7 +360,7 @@
                         <div>Value obtained from reinvestment in marketing</div>
                     </div>
 
-                    <div class="font-semibold">
+                    <div class="font-semibold text-primary">
                         {Math.round(totalMarketingReturn).toLocaleString() +
                             "€"}
                     </div>
@@ -440,7 +440,7 @@
                         </span>
                     </div>
 
-                    <div class="font-semibold">
+                    <div class="font-semibold text-error">
                         {Math.round(valueLostNotAddressed).toLocaleString() +
                             "€"}
                     </div>
