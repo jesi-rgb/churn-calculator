@@ -13,6 +13,7 @@
     const queryParamValue = queryParam(id);
 
     $: $queryParamValue = value.toString();
+
     export let valueDisplay;
 
     export let min = 0;

@@ -1,9 +1,20 @@
 <script lang="ts">
+    import { queryParam } from "sveltekit-search-params";
+
     export let name;
     export let min: undefined | number = undefined;
     export let max: undefined | number = undefined;
     export let value: number;
     export let step = 1;
+
+    let id = name
+        .toLowerCase()
+        .replaceAll(" ", "")
+        .replaceAll(/[^a-zA-Z0-9]/g, "", "");
+
+    const queryParamValue = queryParam(id);
+
+    $: $queryParamValue = value.toString();
 </script>
 
 <div
