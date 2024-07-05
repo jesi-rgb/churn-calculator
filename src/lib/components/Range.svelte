@@ -32,7 +32,7 @@
         </div>
         <input
             {name}
-            class="range range-xs"
+            class="range range-xl md:range-xs my-2 md:my-0"
             type="range"
             {min}
             {max}
