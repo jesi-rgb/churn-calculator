@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { onMount } from "svelte";
     import { queryParam } from "sveltekit-search-params";
 
     export let name;
@@ -10,9 +11,16 @@
         .replaceAll(" ", "")
         .replaceAll(/[^a-zA-Z0-9]/g, "", "");
 
-    const queryParamValue = queryParam(id);
+    const queryParamValue = queryParam(id, {
+        encode: (value: number) => value.toString(),
+        decode: (value: string | null) => (value ? parseInt(value) : null),
+    });
 
-    $: $queryParamValue = value.toString();
+    onMount(() => {
+        if ($queryParamValue != null) {
+            value = $queryParamValue;
+        }
+    });
 
     export let valueDisplay;
 
@@ -36,6 +44,9 @@
             {max}
             {step}
             bind:value
+            on:change={() => {
+                $queryParamValue = value;
+            }}
         />
     </div>
     <div class="text-balance">
