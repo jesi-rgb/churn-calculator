@@ -108,7 +108,7 @@
 </p>
 
 <div
-    class="flex flex-col md:flex-row text-center px-3 gap-3 mb-5 sticky bg-base-100/80 border border-base-content/10 shadow-md shadow-base-content/10 rounded-box backdrop-blur z-1 top-0 py-5"
+    class="flex flex-col md:flex-row text-center px-3 gap-3 mb-5 sticky bg-base-100/95 border border-base-content/10 shadow-md shadow-base-content/10 rounded-box backdrop-blur top-0 z-20 py-5"
 >
     <div class="w-fit mx-auto">
         <div class="text-xl">Total Growth</div>
